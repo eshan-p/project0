@@ -2,16 +2,23 @@ package com.example.repository.DAO;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
-public interface DAOInterface {
+// use generics to make this interface reusable for different entity types
+
+public interface DAOInterface<T> {
     // CREATE
-    public Integer create(Object entity);
+    public Integer create(T entity) throws SQLException;
+
     // READ BY ID
-    public Object findById(Integer id) throws SQLException;
+    public Optional<T> findById(Integer id) throws SQLException;
+
     // READ ALL
-    public List<Object> findAll();
+    public List<T> findAll() throws SQLException;
+
     // UPDATE
-    public void updateById(Object entity);
+    public T updateById(T entity) throws SQLException;
+    
     // DELETE
-    public void deleteById(Integer id);
+    public boolean deleteById(Integer id) throws SQLException;
 }

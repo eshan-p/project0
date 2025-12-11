@@ -4,24 +4,13 @@ import java.util.Scanner;
 
 import com.example.repository.DAO.TeamDAO;
 
-public class Controller {
+public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         TeamDAO teamDAO = new TeamDAO();
 
         while (true) {
-            /*System.out.println("Select an option: ");
-            System.out.println("1. Add Team");
-            System.out.println("2. Add Player");
-            System.out.println("3. Add Box Score");
-            System.out.println("4. Add Game");
-            System.out.println("5. View Team");
-            System.out.println("6. View Player");
-            System.out.println("7. View Box Score");
-            System.out.println("8. View Game");
-            System.out.println("9. Exit");*/
-
             System.out.println("Select an option: ");
             System.out.println("1. Add Team  | 2.  Add Player   | 3.  Add Box Score   | 4.  Add Game");
             System.out.println("5. View Team | 6.  View Player  | 7.  View Box Score  | 8.  View Game");
@@ -33,13 +22,13 @@ public class Controller {
             if (choice == 1) { // Add Team
 
                 //System.out.println("Add Team.");
-                System.out.print("Enter Team Name: ");
-                String name = scanner.nextLine();
+                System.out.print("Enter Team Mascot: ");
+                String mascot = scanner.nextLine();
                 System.out.print("Enter Team City: ");
                 String city = scanner.nextLine();
                 try {
                     var teamEntity = new com.example.repository.entities.TeamEntity();
-                    teamEntity.setName(name);
+                    teamEntity.setMascot(mascot);
                     teamEntity.setCity(city);
 
                     Integer generatedId = teamDAO.create(teamEntity);

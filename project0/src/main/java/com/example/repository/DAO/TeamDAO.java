@@ -1,33 +1,32 @@
 package com.example.repository.DAO;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import com.example.repository.entities.TeamEntity;
 import com.example.util.ConnectionHandler;
 
-public class TeamDAO implements DAOInterface {
+public class TeamDAO implements DAOInterface<TeamEntity> {
 
     private Connection connection = ConnectionHandler.getConnection();
     
     public Integer create(TeamEntity teamEntity) throws SQLException{
-        String sql = "INSERT INTO teams (name, city) VALUES (?, ?) RETURNING id;";
+        String sql = "INSERT INTO teams (mascot, city) VALUES (?, ?) RETURNING id;";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, teamEntity.getName());
+
+            stmt.setString(1, teamEntity.getMascot());
             stmt.setString(2, teamEntity.getCity());
 
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return rs.getInt("id");
-            } else {
-                throw new SQLException("Creating team failed, no ID obtained.");
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("id");
+                }
             }
         }
+        return null;
     }
     
     @Override
@@ -41,8 +40,8 @@ public class TeamDAO implements DAOInterface {
                 if (rs.next()) {
                     TeamEntity teamEntity = new TeamEntity();
                     teamEntity.setTeam_id(rs.getInt("id"));
-                    teamEntity.setName(rs.getString("name"));
                     teamEntity.setCity(rs.getString("city"));
+                    teamEntity.setMascot(rs.getString("mascot"));
 
                     return Optional.of(teamEntity);
                 } 
@@ -53,26 +52,37 @@ public class TeamDAO implements DAOInterface {
     }
 
     @Override
-    public List<Object> findAll() {
+    public List<TeamEntity> findAll() throws SQLException {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findAll'");
+        List<TeamEntity> teams = new ArrayList<>();
+
+        String sql = "SELECT * FROM teams;";
+
+        try (Statement stmt = connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                TeamEntity teamEntity = new TeamEntity();
+                teamEntity.setTeam_id(rs.getInt("id"));
+                teamEntity.setCity(rs.getString("city"));
+                teamEntity.setMascot(rs.getString("mascot"));
+
+                teams.add(teamEntity);
+            }
+
+        }
+        return teams;
     }
 
     @Override
-    public void updateById(Object entity) {
+    public TeamEntity updateById(TeamEntity entity) throws SQLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'updateById'");
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public boolean deleteById(Integer id) throws SQLException {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
-    }
-
-    @Override
-    public Integer create(Object entity) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
     }
 }
