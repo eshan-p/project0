@@ -40,7 +40,7 @@ public class Team {
 
     @Override
     public String toString() {
-        return "Team [team_id=" + team_id + ", mascot=" + mascot + ", city=" + city + "]";
+        return city + " " + mascot + " (ID: " + team_id + ")";
     }
 
     @Override

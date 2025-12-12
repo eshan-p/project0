@@ -51,6 +51,27 @@ public class TeamDAO implements DAOInterface<TeamEntity> {
         return Optional.empty();
     }
 
+    public Optional<TeamEntity> findByMascot(String mascot) throws SQLException {
+        String sql = "SELECT * FROM teams WHERE mascot = ?;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, mascot);
+
+            try (ResultSet rs = stmt.executeQuery()) {;
+                if (rs.next()) {
+                    TeamEntity teamEntity = new TeamEntity();
+                    teamEntity.setTeam_id(rs.getInt("id"));
+                    teamEntity.setCity(rs.getString("city"));
+                    teamEntity.setMascot(rs.getString("mascot"));
+
+                    return Optional.of(teamEntity);
+                } 
+            }
+        }
+
+        return Optional.empty();
+    }
+
     @Override
     public List<TeamEntity> findAll() throws SQLException {
         // TODO Auto-generated method stub

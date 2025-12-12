@@ -2,94 +2,30 @@ package com.example;
 
 import java.util.Scanner;
 
-import com.example.repository.DAO.TeamDAO;
+import com.example.controller.TeamController;
+import com.example.util.InputHandler;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        TeamController teamController = new TeamController();
 
-        TeamDAO teamDAO = new TeamDAO();
+        System.out.println("----- NBA Database & Game Simulation -----");
 
-        while (true) {
-            System.out.println("Select an option: ");
-            System.out.println("1. Add Team  | 2.  Add Player   | 3.  Add Box Score   | 4.  Add Game");
-            System.out.println("5. View Team | 6.  View Player  | 7.  View Box Score  | 8.  View Game");
-            System.out.println("9. Edit Team | 10. Edit Player  | 11. Edit Box Score  | 12. Edit Game");
-            System.out.println("13. Exit");
+        boolean running = true;
+        while (running) {
+            System.out.println("Main Menu:");
+            System.out.println("1. Team Management");
+            System.out.println("0. Exit");
 
-            int choice = Integer.parseInt(scanner.nextLine());
-
-            if (choice == 1) { // Add Team
-
-                //System.out.println("Add Team.");
-                System.out.print("Enter Team Mascot: ");
-                String mascot = scanner.nextLine();
-                System.out.print("Enter Team City: ");
-                String city = scanner.nextLine();
-                try {
-                    var teamEntity = new com.example.repository.entities.TeamEntity();
-                    teamEntity.setMascot(mascot);
-                    teamEntity.setCity(city);
-
-                    Integer generatedId = teamDAO.create(teamEntity);
-                    System.out.println("Team created with ID: " + generatedId);
-                } catch (Exception e) {
-                    System.out.println("Error creating team: " + e.getMessage());
+            int choice = InputHandler.getIntInput("Enter your choice: ");
+            switch (choice) {
+                case 1 -> teamController.handleInput();
+                case 0 -> {
+                    System.out.println("Exiting application. Goodbye!");
+                    running = false;
                 }
-
-            } else if (choice == 2) { // Add Player
-
-                System.out.println("Add Player.");
-
-            } else if (choice == 3) { // Add Box Score
-
-                System.out.println("Add Box Score.");
-
-            } else if (choice == 4) { // Add Game
-
-                System.out.println("Add Game.");
-
-            } else if (choice == 5) { // View Team
-
-                //System.out.println("View Team.");
-                System.out.print("Enter Team ID to view: ");
-                Integer teamId = Integer.parseInt(scanner.nextLine());
-                try {
-                    var teamOpt = teamDAO.findById(teamId);
-                    if (teamOpt.isPresent()) {
-                        System.out.println("Team Details: " + teamOpt.get());
-                    } else {
-                        System.out.println("Team with ID " + teamId + " not found.");
-                    }
-                } catch (Exception e) {
-                    System.out.println("Error retrieving team: " + e.getMessage());
-                }
-
-
-            } else if (choice == 6) { // View Player
-
-                System.out.println("View Player.");
-
-            } else if (choice == 7) { // View Box Score
-
-                System.out.println("View Box Score.");
-
-            } else if (choice == 8) { // View Game
-
-                System.out.println("View Game.");
-
-            } else if (choice == 9) { // Exit
-
-                System.out.println("Exiting...");
-                break;
-
-            } else {
-                System.out.println("Invalid option. Please try again.");
-            }   
+                default -> System.out.println("Invalid choice. Please choose again.");
+            }
         }
-
-        System.out.println();
-        System.out.println();
-        scanner.close();
     }
 }

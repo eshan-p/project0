@@ -1,6 +1,7 @@
 package com.example.service;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import com.example.repository.DAO.TeamDAO;
@@ -23,10 +24,38 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
     }
 
     @Override
+    public TeamEntity updateEntity(Integer id, TeamEntity newEntity) {
+        // TODO: Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public boolean deleteEntity(Integer id) {   
+        // TODO: Auto-generated method stub
+        return false;
+    }
+
+    // ############ ENTITY METHODS ############
+    
+    @Override
     public Optional<TeamEntity> getEntityById(Integer id) {
         try {
             Optional<TeamEntity> teamEntity = teamDAO.findById(id);
             
+            if (teamEntity.isEmpty()) {
+                throw new RuntimeException("Team not found");
+            }
+            return teamEntity;
+        } catch (SQLException | RuntimeException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    public Optional<TeamEntity> getEntityByTeamMascot(String mascot) {
+        try {
+            Optional<TeamEntity> teamEntity = teamDAO.findByMascot(mascot);
+
             if (teamEntity.isEmpty()) {
                 throw new RuntimeException("Team not found");
             }
@@ -48,17 +77,9 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
         }
     }
 
-    @Override
-    public TeamEntity updateEntity(Integer id, TeamEntity newEntity) {
-        // TODO: Auto-generated method stub
-        return null;
-    }
 
-    @Override
-    public boolean deleteEntity(Integer id) {   
-        // TODO: Auto-generated method stub
-        return false;
-    }
+
+    // ############ CONVERSION METHODS ############
 
     @Override
     public Optional<Team> convertEntityToModel(TeamEntity entity) {
@@ -69,6 +90,9 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
 
         return Optional.of(team);
     }
+
+
+    // ############ MODEL METHODS ############
 
     @Override
     public Optional<Team> getModelById(Integer id) {
@@ -91,6 +115,33 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
     }
 
     public Optional<Team> getModelByTeamMascot(String mascot) {
-        return null;
+        Optional<TeamEntity> teamEntity = getEntityByTeamMascot(mascot);
+        try{
+            if (teamEntity.isPresent()){
+                Optional<Team> teamModel = convertEntityToModel(teamEntity.get());
+                if(teamModel.isPresent()){
+                    return teamModel;
+                } else {
+                    throw new RuntimeException("Conversion to model failed");
+                }
+            } else {
+                throw new RuntimeException("TeamEntity not found");
+            }
+        } catch (RuntimeException e){
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+    public List<Team> getAllModels() {
+        List<TeamEntity> teamEntities = getAllEntities();
+        List<Team> teams = new ArrayList<>();
+        for (TeamEntity entity : teamEntities) {
+            Optional<Team> teamOpt = convertEntityToModel(entity);
+            if (teamOpt.isPresent()) {
+                teams.add(teamOpt.get());
+            }
+        }
+        return teams;
     }
 }
