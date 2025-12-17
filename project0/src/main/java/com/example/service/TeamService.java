@@ -25,14 +25,34 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
 
     @Override
     public TeamEntity updateEntity(Integer id, TeamEntity newEntity) {
-        // TODO: Auto-generated method stub
-        return null;
+        try {
+            Optional<TeamEntity> teamEntity = teamDAO.findById(id);
+
+            if (teamEntity.isEmpty()){
+                throw new RuntimeException("Team not found");
+            }
+            return teamDAO.updateById(newEntity);
+            
+        } catch (SQLException | RuntimeException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
     public boolean deleteEntity(Integer id) {   
-        // TODO: Auto-generated method stub
-        return false;
+        try {
+            Optional<TeamEntity> teamEntity = teamDAO.findById(id);
+
+            if (teamEntity.isEmpty()){
+                throw new RuntimeException("Team not found");
+            }
+            return teamDAO.deleteById(id);
+            
+        } catch (SQLException | RuntimeException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     // ############ ENTITY METHODS ############
@@ -97,6 +117,7 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
     @Override
     public Optional<Team> getModelById(Integer id) {
         Optional<TeamEntity> teamEntity = getEntityById(id);
+
         try{
             if (teamEntity.isPresent()){
                 Optional<Team> teamModel = convertEntityToModel(teamEntity.get());
@@ -108,7 +129,7 @@ public class TeamService implements ServiceInterface<TeamEntity, Team> {
             } else {
                 throw new RuntimeException("TeamEntity not found");
             }
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             e.printStackTrace();
             return Optional.empty();
         }

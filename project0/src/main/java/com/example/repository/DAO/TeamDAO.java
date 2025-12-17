@@ -12,6 +12,7 @@ public class TeamDAO implements DAOInterface<TeamEntity> {
 
     private Connection connection = ConnectionHandler.getConnection();
     
+    @Override
     public Integer create(TeamEntity teamEntity) throws SQLException{
         String sql = "INSERT INTO teams (mascot, city) VALUES (?, ?) RETURNING id;";
 
@@ -74,7 +75,6 @@ public class TeamDAO implements DAOInterface<TeamEntity> {
 
     @Override
     public List<TeamEntity> findAll() throws SQLException {
-        // TODO Auto-generated method stub
         List<TeamEntity> teams = new ArrayList<>();
 
         String sql = "SELECT * FROM teams;";
@@ -97,13 +97,37 @@ public class TeamDAO implements DAOInterface<TeamEntity> {
 
     @Override
     public TeamEntity updateById(TeamEntity entity) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'updateById'");
+        String sql = "UPDATE teams SET mascot = ?, city = ? WHERE id = ?;";
+
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setString(1, entity.getMascot());
+            stmt.setString(2, entity.getCity());
+            stmt.setInt(3, entity.getTeam_id());
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated == 0){
+                throw new SQLException("No team found with id " + entity.getTeam_id());
+            }
+        }
+
+        return entity;
     }
 
     @Override
     public boolean deleteById(Integer id) throws SQLException {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteById'");
+        String sql = "DELETE FROM teams WHERE id = ?;";
+
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setInt(1, id);
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated == 0){
+                throw new SQLException("No team found with id + " + id);
+            }
+        }
+
+        return true;
     }
 }
