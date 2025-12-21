@@ -21,10 +21,12 @@ public class PlayerController {
             int choice = InputHandler.getIntInput("Enter your choice: ");
             switch(choice){
                 case 1 -> addPlayer();
-                case 2 -> searchPlayerById();
-                case 3 -> searchPlayersByTeamId();
-                case 4 -> updatePlayer();
-                case 5 -> deletePlayer();
+                //case 2 -> searchPlayerById();
+                case 2 -> searchPlayerByName();
+                case 3 -> searchPlayersByTeamName();
+                case 4 -> getPlayerStats();
+                case 5 -> updatePlayer();
+                case 6 -> deletePlayer();
                 case 0 -> {
                     System.out.println("Exiting Player Management.");
                     running = false;
@@ -39,12 +41,14 @@ public class PlayerController {
     private void printMenu(){
         System.out.println();
         System.out.println("Select an option: ");
-        System.out.println("[1.] Add Player");
-        System.out.println("[2.] Find Player by ID");
-        System.out.println("[3.] Find Players by Team");
-        System.out.println("[4.] Update Player Info");
-        System.out.println("[5.] Delete Player");
-        System.out.println("[0.] Exit");
+        System.out.println("[1.] Add New Player");
+       // System.out.println("[2.] Find Player Info (by ID)");
+        System.out.println("[2.] Find a Player");
+        System.out.println("[3.] Find All Players on Team");
+        System.out.println("[4.] Get Player Stats");
+        System.out.println("[5.] Update Player Info");
+        System.out.println("[6.] Delete Player");
+        System.out.println("[0.] Back to Main Menu");
         System.out.println();
     }
 
@@ -92,6 +96,18 @@ public class PlayerController {
         }
     }
 
+    private void searchPlayerByName() {
+        String firstName = InputHandler.getStringInput("Enter Player's First Name: ");
+        String lastName = InputHandler.getStringInput("Enter Player's Last Name: ");
+        Optional<Player> player = playerService.getModelByName(firstName, lastName);
+
+        if (player.isPresent()) {
+            System.out.println("Player Details: " + player.get());
+        } else {
+            System.out.println("Player not found.");
+        }
+    }
+
     private void searchPlayersByTeamId(){
         Integer teamId = InputHandler.getIntInput("Enter Team ID to search: ");
         Optional<Team> team = teamService.getModelById(teamId);
@@ -104,6 +120,24 @@ public class PlayerController {
         } else {
             System.out.println("Team not found.");
         }
+    }
+
+    private void searchPlayersByTeamName(){
+        String teamMascot = InputHandler.getStringInput("Enter Team to search: ");
+        Optional<Team> team = teamService.getModelByTeamMascot(teamMascot);
+
+        if (team.isPresent()) {
+            List<Player> players = playerService.getAllModelsByTeamName(teamMascot);
+            for (Player player : players){
+                System.out.println(player);
+            }
+        } else {
+            System.out.println("Team not found.");
+        }
+    }
+
+    private void getPlayerStats(){
+        
     }
 
     private void updatePlayer(){

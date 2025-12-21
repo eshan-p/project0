@@ -43,13 +43,13 @@ public class TeamController {
         System.out.println("[4.] Get All Teams");
         System.out.println("[5.] Update Team Info");
         System.out.println("[6.] Delete Team");
-        System.out.println("[0.] Exit");
+        System.out.println("[0.] Back to Main Menu");
         System.out.println();
     } 
 
     private void addTeam(){
-        String city = InputHandler.getStringInput("Enter Team City: ");
-        String mascot = InputHandler.getStringInput("Enter Team Mascot: ");
+        String city = InputHandler.getStringInput("Enter new team's city: ");
+        String mascot = InputHandler.getStringInput("Enter new team's mascot: ");
         
         TeamEntity teamEntity = new TeamEntity();
         teamEntity.setCity(city);
@@ -75,7 +75,7 @@ public class TeamController {
     }
 
     private void searchTeamByMascot(){
-        String mascot = InputHandler.getStringInput("Enter Team Mascot to search: ");
+        String mascot = InputHandler.getStringInput("Enter team to search: ");
         Optional<Team> team = teamService.getModelByTeamMascot(mascot);
 
         if (team.isPresent()) {

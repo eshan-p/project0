@@ -1,5 +1,7 @@
 package com.example.service.model;
 
+import java.util.Objects;
+
 public class Team {
     private Integer team_id;
     private String mascot;
@@ -55,7 +57,7 @@ public class Team {
 
     @Override
     public int hashCode() {
-        return java.util.Objects.hash(team_id, mascot, city);
+        return Objects.hash(team_id, mascot, city);
     }
 }
 

@@ -63,6 +63,32 @@ public class PlayerDAO implements DAOInterface<PlayerEntity> {
         return Optional.empty();
     }
 
+    public Optional<PlayerEntity> findbyName(String firstName, String lastName) throws SQLException {
+        String sql = "SELECT * FROM players WHERE first_name = ? AND last_name = ?;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+
+            try (ResultSet rs = stmt.executeQuery()) {;
+                if (rs.next()) {
+                    PlayerEntity playerEntity = new PlayerEntity();
+                    playerEntity.setId(rs.getInt("id"));
+                    playerEntity.setTeamId(rs.getInt("team_id"));
+                    playerEntity.setFirstName(rs.getString("first_name"));
+                    playerEntity.setLastName(rs.getString("last_name"));
+                    playerEntity.setPosition(rs.getString("plyr_position"));
+                    playerEntity.setCountry(rs.getString("country"));
+                    playerEntity.setJerseyNumber(rs.getInt("jersey_number"));
+
+                    return Optional.of(playerEntity);
+                } 
+            }
+        }
+
+        return Optional.empty();
+    }
+
     public List<PlayerEntity> findAllByTeamId (Integer teamId) throws SQLException {
         List<PlayerEntity> players = new ArrayList<>();
 
@@ -88,7 +114,34 @@ public class PlayerDAO implements DAOInterface<PlayerEntity> {
         }
 
         return players;
-    }
+    } 
+
+    public List<PlayerEntity> findAllByTeamName (String mascot) throws SQLException {
+        List<PlayerEntity> players = new ArrayList<>();
+
+        String sql = "SELECT * FROM players p INNER JOIN teams t ON p.team_id = t.id WHERE t.mascot = ?;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, mascot);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    PlayerEntity playerEntity = new PlayerEntity();
+                    playerEntity.setId(rs.getInt("id"));
+                    playerEntity.setTeamId(rs.getInt("team_id"));
+                    playerEntity.setFirstName(rs.getString("first_name"));
+                    playerEntity.setLastName(rs.getString("last_name"));
+                    playerEntity.setPosition(rs.getString("plyr_position"));
+                    playerEntity.setCountry(rs.getString("country"));
+                    playerEntity.setJerseyNumber(rs.getInt("jersey_number"));
+
+                    players.add(playerEntity);
+                }
+            }
+        }
+
+        return players;
+    } 
 
     @Override
     public List<PlayerEntity> findAll() throws SQLException {

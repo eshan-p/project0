@@ -59,6 +59,7 @@ public class PlayerService implements ServiceInterface<PlayerEntity, Player>{
     }
 
     // ############ ENTITY METHODS ############
+    
     @Override
     public Optional<PlayerEntity> getEntityById(Integer id){
         try {
@@ -75,9 +76,34 @@ public class PlayerService implements ServiceInterface<PlayerEntity, Player>{
         }
     }
 
+    public Optional<PlayerEntity> getEntityByName(String firstName, String lastName){
+        try {
+            Optional<PlayerEntity> playerEntity = playerDAO.findbyName(firstName, lastName);
+
+            if (playerEntity.isEmpty()) {
+                throw new RuntimeException("Player not found");
+            }
+
+            return playerEntity;
+        } catch (SQLException | RuntimeException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
     public List<PlayerEntity> getAllEntitiesByTeamId (Integer id){
         try {
             List<PlayerEntity> playerEntities = playerDAO.findAllByTeamId(id);
+            return playerEntities;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public List<PlayerEntity> getAllEntitiesByTeamName (String mascot){
+        try {
+            List<PlayerEntity> playerEntities = playerDAO.findAllByTeamName(mascot);
             return playerEntities;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -147,8 +173,41 @@ public class PlayerService implements ServiceInterface<PlayerEntity, Player>{
         }
     }
 
+    public Optional<Player> getModelByName(String firstName, String lastName) {
+        Optional<PlayerEntity> playerEntity = getEntityByName(firstName, lastName);
+
+        try{
+            if (playerEntity.isPresent()){
+                Optional<Player> playerModel = convertEntityToModel(playerEntity.get());
+
+                if (playerModel.isPresent()){
+                    return playerModel;
+                } else {
+                    throw new RuntimeException("Conversion to model failed.");
+                }
+            } else {
+                throw new RuntimeException("PlayerEntity not found");
+            }
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
     public List<Player> getAllModelsByTeamId(Integer teamId){
         List<PlayerEntity> playerEntities = getAllEntitiesByTeamId(teamId);
+        List<Player> players = new ArrayList<>();
+        for (PlayerEntity entity : playerEntities) {
+            Optional<Player> playerOpt = convertEntityToModel(entity);
+            if (playerOpt.isPresent()) {
+                players.add(playerOpt.get());
+            }
+        }
+        return players;
+    }
+
+     public List<Player> getAllModelsByTeamName(String mascot){
+        List<PlayerEntity> playerEntities = getAllEntitiesByTeamName(mascot);
         List<Player> players = new ArrayList<>();
         for (PlayerEntity entity : playerEntities) {
             Optional<Player> playerOpt = convertEntityToModel(entity);
