@@ -14,10 +14,11 @@ import com.example.service.model.Player;
 import com.example.service.model.Team;
 
 public class GameService implements ServiceInterface<GameEntity, Game>{
-    private GameDAO gameDAO = new GameDAO();
-    private TeamService teamService = new TeamService();
-    private PlayerService playerService = new PlayerService();
-    private BoxScoreService boxScoreService = new BoxScoreService();
+    private final GameDAO gameDAO = new GameDAO();
+    
+    private final TeamService teamService = new TeamService();
+    private final PlayerService playerService = new PlayerService();
+    private final BoxScoreService boxScoreService = new BoxScoreService();
 
     @Override
     public Integer createEntity(GameEntity entity){
@@ -197,7 +198,7 @@ public class GameService implements ServiceInterface<GameEntity, Game>{
             }
             gameEntity.setId(gameId);
 
-            boxScoreService.saveBoxScores(allBoxScores, gameId);
+            boxScoreService.createEntity(allBoxScores, gameId);
 
             return convertEntityToModel(gameEntity);
 

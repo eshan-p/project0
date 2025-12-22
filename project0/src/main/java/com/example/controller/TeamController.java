@@ -18,13 +18,13 @@ public class TeamController {
             int choice = InputHandler.getIntInput("Enter your choice: ");
             switch(choice){
                 case 1 -> addTeam();
-                case 2 -> searchTeamById();
-                case 3 -> searchTeamByMascot();
-                case 4 -> getAllTeams();
-                case 5 -> updateTeam();
-                case 6 -> deleteTeam();
+                // case 2 -> searchTeamById();
+                case 2 -> searchTeamByMascot();
+                case 3 -> getAllTeams();
+                case 4 -> updateTeam();
+                case 5 -> deleteTeam();
                 case 0 -> {
-                    System.out.println("Exiting Team Management.");
+                    System.out.println("Exiting team management.");
                     running = false;
                 }
                 default -> System.out.println("Invalid choice. Please choose again.");
@@ -38,11 +38,11 @@ public class TeamController {
         System.out.println();
         System.out.println("Select an option: ");
         System.out.println("[1.] Add Team");
-        System.out.println("[2.] Find Team by ID");
-        System.out.println("[3.] Find Team by Mascot");
-        System.out.println("[4.] Get All Teams");
-        System.out.println("[5.] Update Team Info");
-        System.out.println("[6.] Delete Team");
+        // System.out.println("[2.] Find Team by ID");
+        System.out.println("[2.] Find Team");
+        System.out.println("[3.] Get All Teams");
+        System.out.println("[4.] Update Team Info");
+        System.out.println("[5.] Delete Team");
         System.out.println("[0.] Back to Main Menu");
         System.out.println();
     } 
@@ -63,7 +63,7 @@ public class TeamController {
         }
     }
         
-    private void searchTeamById(){
+    /* private void searchTeamById(){
         Integer teamId = InputHandler.getIntInput("Enter Team ID to search: ");
         Optional<Team> team = teamService.getModelById(teamId);
 
@@ -72,7 +72,7 @@ public class TeamController {
         } else {
             System.out.println("Team not found.");
         }
-    }
+    } */
 
     private void searchTeamByMascot(){
         String mascot = InputHandler.getStringInput("Enter team to search: ");
@@ -93,12 +93,12 @@ public class TeamController {
     }
 
     private void updateTeam(){
-        Integer teamId = InputHandler.getIntInput("Enter Team ID to update: ");
+        Integer teamId = InputHandler.getIntInput("Enter team ID to update: ");
         Optional<Team> team = teamService.getModelById(teamId);
 
         if (team.isPresent()){
-            String mascot = InputHandler.getStringInput("Enter new Mascot: ");
-            String city = InputHandler.getStringInput("Enter new City: ");
+            String mascot = InputHandler.getStringInput("Enter new mascot: ");
+            String city = InputHandler.getStringInput("Enter new city: ");
 
             TeamEntity teamEntity = new TeamEntity();
             teamEntity.setTeam_id(teamId);
@@ -110,7 +110,7 @@ public class TeamController {
     }
 
     private void deleteTeam(){
-        Integer teamId = InputHandler.getIntInput("Enter Team ID to delete: ");
+        Integer teamId = InputHandler.getIntInput("Enter team ID to delete: ");
         Optional<Team> team = teamService.getModelById(teamId);
 
         if (team.isPresent()){

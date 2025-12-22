@@ -23,6 +23,40 @@ public class PlayerEntity {
         this.country = country;
         this.jerseyNumber = jerseyNumber;
     }
+    
+    @Override
+    public String toString() {
+        return "PlayerEntity{" +
+                "id=" + id +
+                ", teamId=" + teamId +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", position='" + position + '\'' +
+                ", country='" + country + '\'' +
+                ", jerseyNumber=" + jerseyNumber +
+                '}';
+    }
+
+    @Override 
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlayerEntity that = (PlayerEntity) o;
+
+        if (!id.equals(that.id)) return false;
+        if (!teamId.equals(that.teamId)) return false;
+        if (!firstName.equals(that.firstName)) return false;
+        if (!lastName.equals(that.lastName)) return false;
+        if (!position.equals(that.position)) return false;
+        if (!country.equals(that.country)) return false;
+        return jerseyNumber.equals(that.jerseyNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, teamId, firstName, lastName, position, country, jerseyNumber);
+    }
 
     public Integer getId() {
         return id;
@@ -78,39 +112,5 @@ public class PlayerEntity {
 
     public void setJerseyNumber(Integer jerseyNumber) {
         this.jerseyNumber = jerseyNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "PlayerEntity{" +
-                "id=" + id +
-                ", teamId=" + teamId +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", position='" + position + '\'' +
-                ", country='" + country + '\'' +
-                ", jerseyNumber=" + jerseyNumber +
-                '}';
-    }
-
-    @Override 
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        PlayerEntity that = (PlayerEntity) o;
-
-        if (!id.equals(that.id)) return false;
-        if (!teamId.equals(that.teamId)) return false;
-        if (!firstName.equals(that.firstName)) return false;
-        if (!lastName.equals(that.lastName)) return false;
-        if (!position.equals(that.position)) return false;
-        if (!country.equals(that.country)) return false;
-        return jerseyNumber.equals(that.jerseyNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, teamId, firstName, lastName, position, country, jerseyNumber);
     }
 }

@@ -1,23 +1,29 @@
 package com.example.service;
 
 import java.util.Random;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.example.repository.DAO.BoxScoreDAO;
 import com.example.repository.entities.BoxScoreEntity;
 import com.example.service.model.BoxScore;
+import com.example.service.model.Game;
 import com.example.service.model.Player;
 
 public class BoxScoreService {
 
     private final BoxScoreDAO boxScoreDAO = new BoxScoreDAO();
+    private final PlayerService playerService = new PlayerService();
     private final Random random = new Random();
 
     public BoxScore generateBoxScore(Player player) {
-        BoxScore bs = new BoxScore();
-        bs.setPlayer(player);
+        BoxScore boxScore = new BoxScore();
+        boxScore.setPlayer(player);
 
-        int minutes = randomBetween(20, 38);
+        int minutes = randomBetween(20, 48);
         int fgAtt = randomBetween(minutes / 2, minutes);
         int fgMade = (int) (fgAtt * randomDouble(0.35, 0.60));
 
@@ -27,27 +33,24 @@ public class BoxScoreService {
         int ftAtt = randomBetween(0, 8);
         int ftMade = randomBetween(0, ftAtt);
 
-        int points =
-                (fgMade - threeMade) * 2
-              + threeMade * 3
-              + ftMade;
+        int points = (fgMade - threeMade) * 2 + threeMade * 3 + ftMade;
 
-        bs.setMinutesPlayed(minutes);
-        bs.setFgAttempted(fgAtt);
-        bs.setFgMade(fgMade);
-        bs.setThreesAttempted(threeAtt);
-        bs.setThreesMade(threeMade);
-        bs.setFtAttempted(ftAtt);
-        bs.setFtMade(ftMade);
+        boxScore.setMinutesPlayed(minutes);
+        boxScore.setFgAttempted(fgAtt);
+        boxScore.setFgMade(fgMade);
+        boxScore.setThreesAttempted(threeAtt);
+        boxScore.setThreesMade(threeMade);
+        boxScore.setFtAttempted(ftAtt);
+        boxScore.setFtMade(ftMade);
 
-        bs.setPoints(points);
-        bs.setRebounds(randomBetween(0, 12));
-        bs.setAssists(randomBetween(0, 10));
-        bs.setSteals(randomBetween(0, 4));
-        bs.setBlocks(randomBetween(0, 4));
-        bs.setTurnovers(randomBetween(0, 6));
+        boxScore.setPoints(points);
+        boxScore.setRebounds(randomBetween(0, 12));
+        boxScore.setAssists(randomBetween(0, 10));
+        boxScore.setSteals(randomBetween(0, 4));
+        boxScore.setBlocks(randomBetween(0, 4));
+        boxScore.setTurnovers(randomBetween(0, 6));
 
-        return bs;
+        return boxScore;
     }
 
     private int randomBetween(int min, int max) {
@@ -58,7 +61,7 @@ public class BoxScoreService {
         return min + (max - min) * random.nextDouble();
     }
 
-    public void saveBoxScores(List<BoxScore> boxScores, int gameId) {
+    public void createEntity(List<BoxScore> boxScores, int gameId) {
         for (BoxScore model : boxScores) {
             BoxScoreEntity entity = new BoxScoreEntity();
             entity.setGameId(gameId);
@@ -84,4 +87,85 @@ public class BoxScoreService {
             }
         }
     }
+
+    // ############ ENTITY METHODS ############
+
+    public List<BoxScoreEntity> getAllEntitiesByName(Integer id){
+        try {
+            List<BoxScoreEntity> boxScoreEntities = boxScoreDAO.findLatestScoresByName(id);
+            return boxScoreEntities;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // ############ CONVERSION METHODS ############
+
+    public Optional<BoxScore> convertEntityToModel(BoxScoreEntity entity, Game game) {
+        try {
+            Optional<Player> player = playerService.getModelById(entity.getPlayerId());
+
+            if (player.isEmpty()) {
+                throw new RuntimeException("Invalid player id");
+            }
+
+            BoxScore boxScore = new BoxScore();
+            boxScore.setId(entity.getId());
+            boxScore.setGame(game);
+            boxScore.setPlayer(player.get());
+            boxScore.setMinutesPlayed(entity.getMinutesPlayed());
+            boxScore.setPoints(entity.getPoints());
+            boxScore.setRebounds(entity.getRebounds());
+            boxScore.setAssists(entity.getAssists());
+            boxScore.setSteals(entity.getSteals());
+            boxScore.setBlocks(entity.getBlocks());
+            boxScore.setTurnovers(entity.getTurnovers());
+            boxScore.setFgMade(entity.getFgMade());
+            boxScore.setFgAttempted(entity.getFgAttempted());
+            boxScore.setThreesMade(entity.getThreesMade());
+            boxScore.setThreesAttempted(entity.getThreesAttempted());
+            boxScore.setFtMade(entity.getFtMade());
+            boxScore.setFtAttempted(entity.getFtAttempted());
+
+            return Optional.of(boxScore);
+
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            return Optional.empty();
+        }
+    }
+
+
+    // ############ MODEL METHODS ############
+
+    public List<BoxScore> getAllModelsByName(Integer id){
+        List<BoxScoreEntity> boxScoreEntities = getAllEntitiesByName(id);
+        List<BoxScore> boxScores = new ArrayList<>();
+
+        for (BoxScoreEntity entity : boxScoreEntities) {
+            BoxScore boxScore = new BoxScore();
+            boxScore.setId(entity.getId());
+            boxScore.setMinutesPlayed(entity.getMinutesPlayed());
+            boxScore.setPoints(entity.getPoints());
+            boxScore.setRebounds(entity.getRebounds());
+            boxScore.setAssists(entity.getAssists());
+            boxScore.setSteals(entity.getSteals());
+            boxScore.setBlocks(entity.getBlocks());
+            boxScore.setTurnovers(entity.getTurnovers());
+            boxScore.setFgMade(entity.getFgMade());
+            boxScore.setFgAttempted(entity.getFgAttempted());
+            boxScore.setThreesMade(entity.getThreesMade());
+            boxScore.setThreesAttempted(entity.getThreesAttempted());
+            boxScore.setFtMade(entity.getFtMade());
+            boxScore.setFtAttempted(entity.getFtAttempted());
+
+            playerService.getModelById(entity.getPlayerId())
+                    .ifPresent(boxScore::setPlayer);
+
+            boxScores.add(boxScore);
+        }
+        return boxScores;
+    }
+
 }

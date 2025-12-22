@@ -151,6 +151,7 @@ public class PlayerService implements ServiceInterface<PlayerEntity, Player>{
     }
 
     // ############ MODEL METHODS ############
+    
     @Override
     public Optional<Player> getModelById(Integer id) {
         Optional<PlayerEntity> playerEntity = getEntityById(id);

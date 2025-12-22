@@ -16,6 +16,26 @@ public class Team {
         this.city = city;
     }
 
+    @Override
+    public String toString() {
+       return String.format("[Team ID: %d] %s %s", team_id, city, mascot);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Team other = (Team) obj;
+        return team_id.equals(other.team_id) && mascot.equals(other.mascot) && city.equals(other.city);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(team_id, mascot, city);
+    }
+
     public Integer getTeam_id() {
         return team_id;
     }
@@ -38,26 +58,6 @@ public class Team {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    @Override
-    public String toString() {
-        return city + " " + mascot + " (ID: " + team_id + ")";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        Team other = (Team) obj;
-        return team_id.equals(other.team_id) && mascot.equals(other.mascot) && city.equals(other.city);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(team_id, mascot, city);
     }
 }
 

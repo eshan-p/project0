@@ -141,7 +141,7 @@ public class PlayerDAO implements DAOInterface<PlayerEntity> {
         }
 
         return players;
-    } 
+    }
 
     @Override
     public List<PlayerEntity> findAll() throws SQLException {

@@ -44,24 +44,8 @@ public class BoxScore {
 
     @Override
     public String toString(){
-        return "BoxScoreEntity{" +
-               "id=" + id +
-               ", game=" + game +
-               ", player='" + player + '\'' +
-               ", minutesPlayed='" + minutesPlayed + '\'' +
-               ", points='" + points + '\'' +
-               ", rebounds='" + rebounds + '\'' +
-               ", assists='" + assists + '\'' +
-               ", steals='" + steals + '\'' +
-               ", blocks='" + blocks + '\'' +
-               ", turnovers='" + turnovers + '\'' +
-               ", fgMade='" + fgMade + '\'' +
-               ", fgAttempted='" + fgAttemped + '\'' +
-               ", threesMade='" + threesMade + '\'' +
-               ", threesAttempted='" + threesAttempted + '\'' +
-               ", ftMade='" + ftMade + '\'' +
-               ", ftAttempted='" + ftAttempted + '\'' +
-               '}';
+        return String.format("%s | MIN %d | PTS %d | REB %d | AST %d | STL %d | BLK %d | TO %d | FG %d/%d | 3PT %d/%d | FT %d/%d",
+            player, minutesPlayed, points, rebounds, assists, steals, blocks, turnovers, fgMade, fgAttemped, threesMade, threesAttempted, ftMade, ftAttempted);
     }
 
     @Override

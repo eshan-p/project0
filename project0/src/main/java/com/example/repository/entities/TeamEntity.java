@@ -16,6 +16,26 @@ public class TeamEntity {
         this.mascot = mascot;
     }
 
+    @Override
+    public String toString() {
+        return city + " " + mascot + " (ID: " + team_id + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        TeamEntity other = (TeamEntity) obj;
+        return team_id.equals(other.team_id) && city.equals(other.city) && mascot.equals(other.mascot);
+    }
+       
+    @Override
+    public int hashCode() {
+        return Objects.hash(team_id, city, mascot);
+    }
+
     public int getTeam_id() {
         return team_id;
     }
@@ -38,25 +58,5 @@ public class TeamEntity {
 
     public void setMascot(String mascot) {
         this.mascot = mascot;
-    }
-
-    @Override
-    public String toString() {
-        return city + " " + mascot + " (ID: " + team_id + ")";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        TeamEntity other = (TeamEntity) obj;
-        return team_id.equals(other.team_id) && city.equals(other.city) && mascot.equals(other.mascot);
-    }
-       
-    @Override
-    public int hashCode() {
-        return Objects.hash(team_id, city, mascot);
     }
 }

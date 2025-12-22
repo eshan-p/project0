@@ -22,12 +22,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Player [id=" + id + 
-        ", homeTeam=" + homeTeam + 
-        ", awayTeam=" + awayTeam + 
-        ", homeTeamScore=" + homeTeamScore + 
-        ", awayTeamScore=" + awayTeamScore + 
-        ", overtime=" + overtime + "]";
+        return String.format("[Game ID: %d] %s %d - %d %s%s", id, homeTeam, homeTeamScore, awayTeamScore, awayTeam, overtime ? " (OT)" : "");
     }
 
     @Override

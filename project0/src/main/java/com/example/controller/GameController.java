@@ -23,7 +23,7 @@ public class GameController {
                 case 2 -> searchGameById();
                 case 3 -> searchGamesByTeam();
                 case 0 -> {
-                    System.out.println("Exiting Game Management.");
+                    System.out.println("Exiting game management.");
                     running = false;
                 }
                 default -> System.out.println("Invalid choice. Please choose again.");
@@ -35,7 +35,7 @@ public class GameController {
     private void printMenu(){
         System.out.println();
         System.out.println("Select an option: ");
-        System.out.println("[1.] Simulate a Game"); // essentially the 'create' game option
+        System.out.println("[1.] Simulate a Game");
         System.out.println("[2.] Find Game Outcome by ID");
         System.out.println("[3.] Find All Games Outcomes for Team");
         System.out.println("[0.] Back to Main Menu");
@@ -58,7 +58,7 @@ public class GameController {
     }
 
     private void searchGameById(){
-        Integer gameId = InputHandler.getIntInput("Enter Game ID to search: ");
+        Integer gameId = InputHandler.getIntInput("Enter game ID to search: ");
         Optional<Game> game = gameService.getModelById(gameId);
 
         if (game.isPresent()){
@@ -69,7 +69,7 @@ public class GameController {
     }
 
     private void searchGamesByTeam(){
-        String mascot = InputHandler.getStringInput("Enter Team to search: ");
+        String mascot = InputHandler.getStringInput("Enter team to search: ");
         Optional<Team> team = teamService.getModelByTeamMascot(mascot);
 
         if (team.isPresent()){

@@ -22,6 +22,31 @@ public class Player {
         this.jerseyNumber = jerseyNumber;
     }
 
+    @Override
+    public String toString() {
+        return String.format("[Player ID: %d] #%d %s %s | %s | %s", id, jerseyNumber, firstName, lastName, position, team != null ? team.getMascot() : "Free Agent");
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Player other = (Player) obj;
+        return id.equals(other.id) && team.equals(other.team) &&
+               firstName.equals(other.firstName) &&
+               lastName.equals(other.lastName) &&
+               position.equals(other.position) &&
+               country.equals(other.country) &&
+               jerseyNumber.equals(other.jerseyNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(id, team, firstName, lastName, position, country, jerseyNumber);
+    }
+
     public Integer getId() {
         return id;
     }
@@ -76,35 +101,5 @@ public class Player {
 
     public void setJerseyNumber(Integer jerseyNumber) {
         this.jerseyNumber = jerseyNumber;
-    }
-
-    @Override
-    public String toString() {
-        return "Player [id=" + id + ", team=" + team + 
-        ", firstName=" + firstName + 
-        ", lastName=" + lastName + 
-        ", position=" + position + 
-        ", country=" + country + 
-        ", jerseyNumber=" + jerseyNumber + "]";
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
-            return true;
-        if (obj == null || getClass() != obj.getClass())
-            return false;
-        Player other = (Player) obj;
-        return id.equals(other.id) && team.equals(other.team) &&
-               firstName.equals(other.firstName) &&
-               lastName.equals(other.lastName) &&
-               position.equals(other.position) &&
-               country.equals(other.country) &&
-               jerseyNumber.equals(other.jerseyNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return java.util.Objects.hash(id, team, firstName, lastName, position, country, jerseyNumber);
     }
 }

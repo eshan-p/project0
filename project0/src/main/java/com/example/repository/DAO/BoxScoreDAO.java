@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,9 +45,45 @@ public class BoxScoreDAO implements DAOInterface<BoxScoreEntity>{
         return null;
     }
 
+    public List<BoxScoreEntity> findLatestScoresByName(Integer playerId) throws SQLException{
+        List<BoxScoreEntity> boxScores = new ArrayList<>();
+
+        String sql = "SELECT * from boxscores where player_id = ? LIMIT 10;";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setInt(1, playerId);
+
+            try (ResultSet rs = stmt.executeQuery()){
+                while (rs.next()) {
+                    BoxScoreEntity boxScoreEntity = new BoxScoreEntity();
+                    boxScoreEntity.setGameId(rs.getInt("game_id"));
+                    boxScoreEntity.setPlayerId(rs.getInt("player_id"));
+                    boxScoreEntity.setMinutesPlayed(rs.getInt("minutes_played"));
+                    boxScoreEntity.setPoints(rs.getInt("points"));
+                    boxScoreEntity.setRebounds(rs.getInt("rebounds"));
+                    boxScoreEntity.setAssists(rs.getInt("assists"));
+                    boxScoreEntity.setSteals(rs.getInt("steals"));
+                    boxScoreEntity.setBlocks(rs.getInt("blocks"));
+                    boxScoreEntity.setTurnovers(rs.getInt("turnovers"));
+                    boxScoreEntity.setFgMade(rs.getInt("field_goals_made"));
+                    boxScoreEntity.setFgAttempted(rs.getInt("field_goals_attempted"));
+                    boxScoreEntity.setThreesMade(rs.getInt("three_points_made"));
+                    boxScoreEntity.setThreesAttempted(rs.getInt("three_points_attempted"));
+                    boxScoreEntity.setFtMade(rs.getInt("free_throws_made"));
+                    boxScoreEntity.setFtAttempted(rs.getInt("free_throws_attempted"));
+
+                    boxScores.add(boxScoreEntity);
+                }
+            }
+        }
+
+        return boxScores;
+    } 
+
     @Override
     public Optional<BoxScoreEntity> findById(Integer id) throws SQLException{
-        return null;
+        // No implementation by design
+        throw new UnsupportedOperationException("Unimplemented method 'findById'");
     }
 
     @Override
