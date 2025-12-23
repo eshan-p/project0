@@ -14,11 +14,27 @@ import com.example.service.model.Player;
 import com.example.service.model.Team;
 
 public class GameService implements ServiceInterface<GameEntity, Game>{
+    /* (did not work with testing) 
     private final GameDAO gameDAO = new GameDAO();
-    
     private final TeamService teamService = new TeamService();
     private final PlayerService playerService = new PlayerService();
-    private final BoxScoreService boxScoreService = new BoxScoreService();
+    private final BoxScoreService boxScoreService = new BoxScoreService();*/
+
+    private final GameDAO gameDAO;
+    private final TeamService teamService;
+    private final PlayerService playerService;
+    private final BoxScoreService boxScoreService;
+
+    public GameService(){
+        this(new GameDAO(), new TeamService(), new PlayerService(), new BoxScoreService());
+    }
+
+    public GameService(GameDAO gameDAO, TeamService teamService, PlayerService playerService, BoxScoreService boxScoreService){
+        this.gameDAO = gameDAO;
+        this.teamService = teamService;
+        this.playerService = playerService;
+        this.boxScoreService = boxScoreService;
+    }
 
     @Override
     public Integer createEntity(GameEntity entity){

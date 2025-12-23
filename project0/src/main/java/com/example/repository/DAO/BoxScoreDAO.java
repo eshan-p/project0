@@ -45,7 +45,7 @@ public class BoxScoreDAO implements DAOInterface<BoxScoreEntity>{
         return null;
     }
 
-    public List<BoxScoreEntity> findLatestScoresByName(Integer playerId) throws SQLException{
+    public List<BoxScoreEntity> findLatestScoresById(Integer playerId) throws SQLException{
         List<BoxScoreEntity> boxScores = new ArrayList<>();
 
         String sql = "SELECT * from boxscores where player_id = ? LIMIT 10;";

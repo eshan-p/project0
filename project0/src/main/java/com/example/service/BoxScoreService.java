@@ -15,15 +15,26 @@ import com.example.service.model.Player;
 
 public class BoxScoreService {
 
-    private final BoxScoreDAO boxScoreDAO = new BoxScoreDAO();
-    private final PlayerService playerService = new PlayerService();
-    private final Random random = new Random();
+    private final BoxScoreDAO boxScoreDAO;
+    private final PlayerService playerService;
+    private final Random random;
+
+    public BoxScoreService() {
+        this(new BoxScoreDAO(), new PlayerService(), new Random());
+    }
+
+    public BoxScoreService(BoxScoreDAO boxScoreDAO, PlayerService playerService, Random random) {
+        this.boxScoreDAO = boxScoreDAO;
+        this.playerService = playerService;
+        this.random = random;
+    }
 
     public BoxScore generateBoxScore(Player player) {
         BoxScore boxScore = new BoxScore();
         boxScore.setPlayer(player);
 
         int minutes = randomBetween(20, 48);
+        
         int fgAtt = randomBetween(minutes / 2, minutes);
         int fgMade = (int) (fgAtt * randomDouble(0.35, 0.60));
 
@@ -61,6 +72,8 @@ public class BoxScoreService {
         return min + (max - min) * random.nextDouble();
     }
 
+    // ############ ENTITY METHODS ############
+
     public void createEntity(List<BoxScore> boxScores, int gameId) {
         for (BoxScore model : boxScores) {
             BoxScoreEntity entity = new BoxScoreEntity();
@@ -88,11 +101,9 @@ public class BoxScoreService {
         }
     }
 
-    // ############ ENTITY METHODS ############
-
-    public List<BoxScoreEntity> getAllEntitiesByName(Integer id){
+    public List<BoxScoreEntity> getAllEntitiesById(Integer id){
         try {
-            List<BoxScoreEntity> boxScoreEntities = boxScoreDAO.findLatestScoresByName(id);
+            List<BoxScoreEntity> boxScoreEntities = boxScoreDAO.findLatestScoresById(id);
             return boxScoreEntities;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -139,8 +150,8 @@ public class BoxScoreService {
 
     // ############ MODEL METHODS ############
 
-    public List<BoxScore> getAllModelsByName(Integer id){
-        List<BoxScoreEntity> boxScoreEntities = getAllEntitiesByName(id);
+    public List<BoxScore> getAllModelsById(Integer id){
+        List<BoxScoreEntity> boxScoreEntities = getAllEntitiesById(id);
         List<BoxScore> boxScores = new ArrayList<>();
 
         for (BoxScoreEntity entity : boxScoreEntities) {
@@ -160,8 +171,7 @@ public class BoxScoreService {
             boxScore.setFtMade(entity.getFtMade());
             boxScore.setFtAttempted(entity.getFtAttempted());
 
-            playerService.getModelById(entity.getPlayerId())
-                    .ifPresent(boxScore::setPlayer);
+            playerService.getModelById(entity.getPlayerId()).ifPresent(boxScore::setPlayer);
 
             boxScores.add(boxScore);
         }

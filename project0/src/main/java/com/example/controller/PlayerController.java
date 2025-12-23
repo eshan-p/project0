@@ -145,7 +145,7 @@ public class PlayerController {
         Optional<Player> player = playerService.getModelByName(firstName, lastName);
 
         if (player.isPresent()) {
-            List<BoxScore> boxScores = boxScoreService.getAllModelsByName(player.get().getId());
+            List<BoxScore> boxScores = boxScoreService.getAllModelsById(player.get().getId());
             for (BoxScore boxScore : boxScores){
                 System.out.println(boxScore);
             }
