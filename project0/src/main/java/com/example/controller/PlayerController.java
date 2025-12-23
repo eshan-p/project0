@@ -105,7 +105,7 @@ public class PlayerController {
         Optional<Player> player = playerService.getModelByName(firstName, lastName);
 
         if (player.isPresent()) {
-            System.out.println("Player Details: " + player.get());
+            System.out.println(player.get());
         } else {
             System.out.println("Player not found.");
         }

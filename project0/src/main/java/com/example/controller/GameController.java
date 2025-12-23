@@ -52,7 +52,8 @@ public class GameController {
             System.out.println("Team(s) not found.");
             return;
         } else {
-            System.out.println(gameService.simulateGame(homeTeamOpt.get().getTeam_id(), awayTeamOpt.get().getTeam_id()));
+            Optional<Game> result = gameService.simulateGame(homeTeamOpt.get().getTeam_id(), awayTeamOpt.get().getTeam_id());
+            System.out.println(result.get());
         }
 
     }
@@ -62,7 +63,7 @@ public class GameController {
         Optional<Game> game = gameService.getModelById(gameId);
 
         if (game.isPresent()){
-            System.out.println("Game Details: " + game.get());
+            System.out.println(game.get());
         } else {
             System.out.println("Game not found.");
         }

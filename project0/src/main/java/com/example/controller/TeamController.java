@@ -79,7 +79,7 @@ public class TeamController {
         Optional<Team> team = teamService.getModelByTeamMascot(mascot);
 
         if (team.isPresent()) {
-            System.out.println("Team Details: " + team.get());
+            System.out.println(team.get());
         } else {
             System.out.println("Team not found.");
         }
